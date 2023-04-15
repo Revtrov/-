@@ -1,57 +1,56 @@
-import { Renderer } from "./Renderer.js";
 import { Buffer } from "./Buffer.js";
+import { GameEntity } from "./GameEntity.js";
+import { Scene } from "./Scene.js";
+
+
+let resolution = { x: 382, y: 216 };
 let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
-let imageLoader = document.getElementById("imageLoader");
-let imageLoaderCtx = imageLoader.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width =resolution.x;
+canvas.height = resolution.y;
+const offscreen = canvas.transferControlToOffscreen();
+const worker = new Worker("Renderer.js");
+worker.postMessage({ msg: "offscreen", canvas: offscreen}, [offscreen]);
 if (window.innerWidth > window.innerHeight) {
   canvas.style.height = window.innerHeight;
 } else {
   canvas.style.width = window.innerWidth;
 }
-let size = 128;
-let bufferB = new Buffer(size, size);
-const face = new Image();
-face.src = "./moon.png";
-let imageData;
-imageLoaderCtx.imageSmoothingEnabled = false;
-face.onload = () => {
-  imageLoader.imageSmoothingEnabled = false;
-  imageLoaderCtx.drawImage(face, 0, 0, size, size);
-  imageData = imageLoaderCtx.getImageData(0, 0, size, size);
-  bufferB.data = imageData.data;
-};
+
+
+const moon = new GameEntity("./moon.png", 0, 108 - 64, 64, 64, 2);
+const face = new GameEntity("./face.png", 0, 108 - 64, 64, 64, 1);
 
 window.onresize = () => {};
-let buffer = new Buffer(192, 144);
-let image = new ImageData(buffer.data, 192, 144);
-let x, y;
-canvas.addEventListener("mousemove", (e) => {
-  var rect = e.target.getBoundingClientRect();
-  x = Math.floor(((e.clientX - rect.left) / canvas.clientWidth) * canvas.width);
-  y = Math.floor(
-    ((e.clientY - rect.top) / canvas.clientHeight) * canvas.height
-  );
-});
+let buffer = new Buffer(resolution.x, resolution.y);
+let scene = new Scene([moon, face], 100, null, buffer);
+let image = new ImageData(buffer.data, resolution.x, resolution.y);
 
-let renderer = new Renderer(ctx, image, 240, canvas);
-setInterval(() => {
-  imageLoader.width = size;
-  imageLoader.height = size;
-  size -= 4;
-  imageLoaderCtx.webkitImageSmoothingEnabled = false;
-  imageLoaderCtx.mozImageSmoothingEnabled = false;
-  imageLoaderCtx.imageSmoothingEnabled = false;
-  imageLoader.imageSmoothingEnabled = false;
-  imageLoaderCtx.drawImage(face, 0, 0, size, size);
-  imageData = imageLoaderCtx.getImageData(0, 0, size, size);
-  bufferB.data = imageData.data;
-  bufferB.width = size;
-  bufferB.height = size;
-  buffer.reset();
-  buffer.merge(bufferB, x - bufferB.width / 2, y - bufferB.height / 2);
+let pressedKeys = {};
+window.onkeyup =  (e) =>{
+  pressedKeys[e.keyCode] = false;
+};
+window.onkeydown =  (e) =>{
+  pressedKeys[e.keyCode] = true;
+};
 
-  renderer.buffer = image;
-}, 1000 / 10);
+canvas.addEventListener("mousemove", (e) => {});
+setInterval(()=>{
+  if (pressedKeys[87]) {
+    moon.y -= .5;
+  }
+  if (pressedKeys[83]) {
+    moon.y += .5;
+  }
+  if (pressedKeys[65]) {
+    moon.x -= .5;
+  }
+  if (pressedKeys[68]) {
+    moon.x += .5;
+  }
+},1000/144)
+function animate(){
+  worker.postMessage({ msg: "render", image:image});
+  requestAnimationFrame(animate)
+}
+animate()
+export { image };

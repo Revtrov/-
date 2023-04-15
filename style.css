@@ -18,5 +18,10 @@ overflow: hidden;
 }
 canvas{
     image-rendering: pixelated;
-    background:transparent
+}
+#imageLoader{
+    position: fixed;
+    left:100vw;
+    width:0;
+    height:0;
 }
