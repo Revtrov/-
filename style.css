@@ -1,27 +1,28 @@
-body{
-    display: flex;
-    margin:0;
-    padding:0;
-display:grid;
-grid-template-rows: 100%;
-align-items: center;
-justify-items: center;
-height:100vh;
-background:black;
-overflow: hidden;
+body {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-rows: 100%;
+  align-items: center;
+  justify-items: center;
+  height: 100vh;
+  background: black;
+  overflow: hidden;
 }
-#canvas{
-    border:1pc solid white;
-    cursor: none;
-    width:100%;
-    height:auto;
+#canvas {
+  border: 1pc solid white;
+  cursor: none;
+  width: 100%;
+  height: auto;
 }
-canvas{
-    image-rendering: pixelated;
+canvas {
+  image-rendering: pixelated;
+  background-color: transparent;
 }
-#imageLoader{
-    position: fixed;
-    left:100vw;
-    width:0;
-    height:0;
+#imageLoader {
+  position: fixed;
+  left: 100vw;
+  width: 0;
+  height: 0;
 }

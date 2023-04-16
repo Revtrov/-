@@ -8,7 +8,10 @@ class Scene {
     this.update= setInterval(() => {
         this.buffer.reset();
         for(let i = 0;i<entityCount;i++){
-            this.gameEntities[i].updateEntity(this.buffer)
+          this.gameEntities[i].updateEntity(this.buffer)
+            if(this.gameEntities[i].wrap){
+              //this.gameEntities[i].repeatX(this.buffer)
+            }
         }
       }, this.tickRate);
   }

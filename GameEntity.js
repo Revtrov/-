@@ -1,18 +1,19 @@
 import {Buffer} from "./Buffer.js"
 class GameEntity {
     
-  constructor(_sprite, _x, _y, _width, _height,_zHeight,_controllable) {
+  constructor(_spriteSrc, _x, _y, _width, _height,_zHeight,_controllable) {
     const imageLoader = document.createElement('canvas');
     const imageLoaderCtx = imageLoader.getContext("2d");
-    
     this.x = _x;
     this.y = _y;
     this.width = _width;
     this.height = _height;
+    imageLoader.height = this.height;
+    imageLoader.width = this.width;
     this.zHeight = _zHeight;
     this.buffer = new Buffer(this.width,this.height);
     this.sprite = new Image();
-    this.sprite.src = _sprite;
+    this.sprite.src = _spriteSrc;
     let imageData;
     imageLoaderCtx.imageSmoothingEnabled = false;
     this.sprite.onload = () => {
