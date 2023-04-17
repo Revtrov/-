@@ -24,7 +24,7 @@ class GameEntity {
     };
   }
   updateEntity(buffer){
-    buffer.merge(this.buffer,Math.floor(this.x),Math.floor(this.y))
+    buffer.merge(this.buffer,~~this.x,~~this.y)
   }
 
 }

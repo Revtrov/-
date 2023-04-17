@@ -10,6 +10,8 @@ canvas.width =resolution.x;
 canvas.height = resolution.y;
 const offscreen = canvas.transferControlToOffscreen();
 const worker = new Worker("Renderer.js");
+
+
 worker.postMessage({ msg: "offscreen", canvas: offscreen}, [offscreen]);
 if (window.innerWidth > window.innerHeight) {
   canvas.style.height = window.innerHeight;
@@ -25,7 +27,8 @@ const Background = new ParallaxBackground("./background.png",0,0,968,764,0,0)
 
 let buffer = new Buffer(resolution.x, resolution.y);
 let scene = new Scene([moon,Background], 1000/240, null, buffer);
-let image = new ImageData(buffer.data, resolution.x, resolution.y,{ colorSpace: "display-p3" });
+let image = new ImageData(buffer.data, resolution.x, resolution.y,);
+
 
 let pressedKeys = {};
 window.onkeyup =  (e) =>{
@@ -41,10 +44,10 @@ canvas.addEventListener("mousemove", (e) => {});
 
 setInterval(()=>{
   if (pressedKeys[87]) {
-    moon.y -= .25;
+    moon.y -= .5;
   }
   if (pressedKeys[83]) {
-    moon.y += .25;
+    moon.y += .5;
   }
   if (pressedKeys[65]) {
     moon.x -= .5;
