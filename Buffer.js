@@ -16,31 +16,40 @@ class Buffer {
     this.imageLoaderCtx = this.imageLoader.getContext("2d");
     this.imageLoader.height = this.height;
     this.imageLoader.width = this.width;
-    this.bufferLength = this.width*this.height*4;
+    this.bufferLength = this.width * this.height * 4;
   }
   reset() {
     this.data.fill(0);
   }
   merge = (buffer, x, y) => {
-    if(x>this.width||y>this.height||y<-buffer.height||x<y<-buffer.width){
-      return
+    if (
+      x >= this.rowLen ||
+      y >= this.height ||
+      y < -buffer.height ||
+      x < -buffer.width
+    ) {
+      return;
     }
-    let rowIndex = x*4;
-    let pixelsTimeHeight = y * this.rowLen;
-    let origin = pixelsTimeHeight + rowIndex;
-    for (let i = buffer.bufferLength-1; i > 3; i -= 4) {
-      if (buffer.data[i]) {
-        let devided = (i / buffer.rowLen)>>>0;
-        let innerTimeLen = devided * this.rowLen;
-        let pxIndex = origin + innerTimeLen + (i-(buffer.rowLen*devided));
-        let prev =  pixelsTimeHeight+innerTimeLen;
-        if (pxIndex > prev && pxIndex < prev+this.rowLen) {
-          this.data[pxIndex] = buffer.data[i];  
-          this.data[pxIndex - 3] = buffer.data[i - 3];
-          this.data[pxIndex - 2] = buffer.data[i - 2];
-          this.data[pxIndex - 1] = buffer.data[i - 1];
+    const bufferData = buffer.data;
+    const rowIndex = x * 4;
+    const pixelsTimeHeight = y * this.rowLen;
+    const origin = pixelsTimeHeight + rowIndex;
+    let i = buffer.bufferLength - 1;
+    while (i > 3) {
+      if (bufferData[i]) {
+        const devided = (i / buffer.rowLen) >>> 0;
+        const innerTimeLen = devided * this.rowLen;
+        const pxIndex = origin + innerTimeLen + (i - buffer.rowLen * devided);
+        const prev = pixelsTimeHeight + innerTimeLen;
+
+        if (pxIndex > prev && pxIndex < prev + this.rowLen) {
+          this.data[pxIndex] = bufferData[i];
+          this.data[pxIndex - 3] = bufferData[i - 3];
+          this.data[pxIndex - 2] = bufferData[i - 2];
+          this.data[pxIndex - 1] = bufferData[i - 1];
         }
       }
+      i -= 4;
     }
   };
   get() {
