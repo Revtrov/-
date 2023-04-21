@@ -20,13 +20,14 @@ if (window.innerWidth > window.innerHeight) {
 }
 
 
+const face = new GameEntity("./face.png",0,0,32,32)
 const moon = new GameEntity("./moon.png", 0, 108 - 64, 64, 64, 1);
-const Background = new ParallaxBackground("./background.png",0,0,968,764,0,0)
+//const Background = new ParallaxBackground("./background.png",0,0,968,764,0,0)
 //const BackgroundB = new ParallaxBackground("./background.png",0,0,191,64,0,2)
 
 
 let buffer = new Buffer(resolution.x, resolution.y);
-let scene = new Scene([moon,Background], 1000/240, null, buffer);
+let scene = new Scene([moon,face], 1000/240, null, buffer);
 let image = new ImageData(buffer.data, resolution.x, resolution.y,);
 
 
@@ -39,10 +40,14 @@ window.onkeydown =  (e) =>{
 };
 
 //BackgroundB.speed = .1
-Background.speed = .1
+//Background.speed = .1
 canvas.addEventListener("mousemove", (e) => {});
 
+let i = 0;
 setInterval(()=>{
+  i+=1
+  moon.rotateEntity(i)
+  face.x+=0.1
   if (pressedKeys[87]) {
     moon.y -= .5;
   }
