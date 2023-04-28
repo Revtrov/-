@@ -49,6 +49,7 @@ class GameEntity {
       this.imageLoaderCtx.rotate(rad);
       
     this.imageLoaderCtx.translate(-this.width/2, -this.height/2);
+    this.imageLoaderCtx.clearRect(0,0,this.width,this.height)
       this.imageLoaderCtx.drawImage(this.sprite, 0, 0, this.width, this.height);
       this.imageLoaderCtx.restore();
       imageData = this.imageLoaderCtx.getImageData(
