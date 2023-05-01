@@ -4,7 +4,7 @@ import { Scene } from "./Scene.js";
 import { ParallaxBackground } from "./Background.js";
 
 window.onload= () => {};
-let resolution = { x: 382, y: 216 };
+let resolution = { x: 682, y: 312 };
 let canvas = document.getElementById("canvas");
 canvas.width =resolution.x;
 canvas.height = resolution.y;
@@ -21,7 +21,7 @@ if (window.innerWidth > window.innerHeight) {
 
 
 const face = new GameEntity("./face.png",0,0,32,32)
-const moon = new GameEntity("./moon.png", 0, 108 - 64, 64, 64, 1);
+const moon = new GameEntity("./Son_Goku.webp", 0, 108 - 32, 64, 164, 1);
 //const Background = new ParallaxBackground("./background.png",0,0,968,764,0,0)
 //const BackgroundB = new ParallaxBackground("./background.png",0,0,191,64,0,2)
 
@@ -42,32 +42,64 @@ window.onkeydown =  (e) =>{
 //BackgroundB.speed = .1
 //Background.speed = .1
 canvas.addEventListener("mousemove", (e) => {});
+let f = 0;
+const start = Date.now();
+const stop = start + 5000;
 
-let i = 0;
+function raf() {
+  requestAnimationFrame(() => {
+    const now = Date.now();
+    if (now < stop){
+      f++;
+      raf();
+    }else{
+      const elapsedSeconds = (now - start) / 1000;
+      console.log('Frame rate is: %f fps', f / elapsedSeconds);
+    }
+  });
+}
+
+//console.log('Testing frame rate...')
+//raf();
+let i =0;
+let momentum= 2
+let dirs = [0,0]
+document.addEventListener("keydown",(e)=>{
+  if(e.key == "e"){
+    console.log( moon.border)
+  }
+})
 setInterval(()=>{
+  face.setRotation(i)
   i+=1
-  moon.rotateEntity(i)
   face.x+=0.1
   if (pressedKeys[87]) {
-    moon.y -= .5;
+    dirs[1] = 1
+    moon.y -= momentum/(dirs[0]+dirs[1]);
   }
   if (pressedKeys[83]) {
-    moon.y += .5;
+    dirs[1] = 1
+    moon.y += momentum/(dirs[0]+dirs[1]);
   }
   if (pressedKeys[65]) {
-    moon.x -= .5;
+    dirs[0] = 1
+    moon.unMirror()
+    moon.x -= momentum/(dirs[0]+dirs[1]);
     //BackgroundB.direction = 1
     //BackgroundB.scroll()
     //Background.directionX = 1
     //Background.scrollX()
   }
   if (pressedKeys[68]) {
-    moon.x += .5;
+    dirs[0] = 1
+    moon.mirror()
+    moon.x += momentum/(dirs[0]+dirs[1]);
     //BackgroundB.direction = -1
     //BackgroundB.scroll()
     //Background.directionX = -1
     //Background.scrollX()
   }
+  dirs=[0,0]
 },1000/240)
 function animate(){
   worker.postMessage({ msg: "render", image:image});

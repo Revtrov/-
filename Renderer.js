@@ -5,7 +5,8 @@ onmessage = (ev) => {
     ctx = canvas.getContext("2d",{alpha:false});
   }
   if (ev.data.msg === "render") {
-    createImageBitmap(ev.data.image)
+    //createImageBitmap(ev.data.image)
       ctx.putImageData(ev.data.image,0,0);
+      ev.data = null
   }
 };

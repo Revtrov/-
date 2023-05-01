@@ -20,6 +20,9 @@ class Buffer {
   }
   reset() {
     this.data.fill(0);
+    for (let i = 3; i < this.data.length; i += 4) {
+      this.data[i] = 255;
+    }
   }
   merge = (buffer, x, y) => {
     if (
@@ -38,7 +41,7 @@ class Buffer {
     while (i > 3) {
       if (bufferData[i]) {
         const devided = (i / buffer.rowLen) >>> 0;
-        const innerTimeLen = devided * this.rowLen;
+        const innerTimeLen = (devided * this.rowLen);
         const pxIndex = origin + innerTimeLen + (i - buffer.rowLen * devided);
         const prev = pixelsTimeHeight + innerTimeLen;
 
