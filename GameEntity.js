@@ -55,7 +55,7 @@ class GameEntity {
           -this.imageLoaderHalf
         );
          this.imageLoaderCtx.filter =
-           "  drop-shadow(-1px -1px 0px rgba(0,0,0,1)) drop-shadow(1px 1px 0px rgba(0,0,0,1)) drop-shadow(-1px 1px 0px rgba(0,0,0,1)) drop-shadow(1px -1px 0px rgba(0,0,0,1))";
+           "  drop-shadow(-10px -10px 0px rgba(0,0,0,1)) drop-shadow(10px 10px 0px rgba(0,0,0,1)) drop-shadow(-10px 10px 0px rgba(0,0,0,1)) drop-shadow(10px -10px 0px rgba(0,0,0,1))";
         this.imageLoaderCtx.drawImage(
           this.sprite,
           this.xInset,
@@ -88,8 +88,8 @@ class GameEntity {
           this.imageLoader.width,
           this.imageLoader.height
         );
-        // this.imageLoaderCtx.filter =
-        //   " invert(100%) drop-shadow(-1px -1px 1px rgba(255,255,0,1)) drop-shadow(1px 1px 1px rgba(255,255,0,1)) drop-shadow(-1px 1px 1px rgba(255,255,0,1)) drop-shadow(1px -1px 1px rgba(255,255,0,1))";
+         this.imageLoaderCtx.filter =
+           " invert(100%) drop-shadow(-10px -10px 10px rgba(255,255,0,1)) drop-shadow(10px 10px 10px rgba(255,255,0,1)) drop-shadow(-10px 10px 10px rgba(255,255,0,1)) drop-shadow(10px -10px 10px rgba(255,255,0,1))";
           this.imageLoaderCtx.scale(-1,1)
           this.imageLoaderCtx.drawImage(
           this.sprite,

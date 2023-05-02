@@ -21,7 +21,7 @@ if (window.innerWidth > window.innerHeight) {
 
 
 const face = new GameEntity("./face.png",0,0,32,32)
-const moon = new GameEntity("./Son_Goku.webp", 0, 108 - 32, 64, 164, 1);
+const moon = new GameEntity("./Son_Goku.webp", 0, 108 - 32, 120,204, 1);
 //const Background = new ParallaxBackground("./background.png",0,0,968,764,0,0)
 //const BackgroundB = new ParallaxBackground("./background.png",0,0,191,64,0,2)
 
