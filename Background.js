@@ -1,7 +1,7 @@
 import { Buffer } from "./Buffer.js";
 import { GameEntity } from "./GameEntity.js";
-import { resolution } from "./script.js";
-class ParallaxBackground extends GameEntity {
+import { resolution, buffer } from "./script.js";
+class ParallaxBackground {
   constructor(
     _spriteSrc,
     _x,
@@ -11,23 +11,35 @@ class ParallaxBackground extends GameEntity {
     _animationPosition,
     _zHeight
   ) {
-    super(_spriteSrc, _x, _y, _width, _height, _zHeight);
-
+    this.height = _height;
+    this.width = _width;
+    this.x = _x;
+    this.y = _y;
     const imageLoader = document.createElement("canvas");
     const imageLoaderCtx = imageLoader.getContext("2d");
-    this.y = resolution.y - this.height;
     imageLoader.height = this.height;
     imageLoader.width = this.width;
     this.direction = 1;
     this.wrap = true;
-    this.repeatsX = Math.ceil(resolution.x / this.width);
-    this.repeatsY = Math.ceil(resolution.x / this.width);
+    this.repeatsX = ((resolution.x / this.width) >>> 0) ;
+    this.repeatsY = ((resolution.y / this.height) >>> 0) ;
+    if (this.repeatsX > this.repeatsY) {
+      if (!(this.repeatsX & (2 - 1))) {
+        this.repeatsX+=1;
+      }
+      this.repeatsY = this.repeatsX;
+    } else {
+      if (!(this.repeatsY & (2 - 1))) {
+        this.repeatsY+=1;
+      }
+      this.repeatsX = this.repeatsY;
+    }
+    console.log(this.repeatsX, this.repeatsY);
     this.buffer = new Buffer(this.width, this.height);
     this.sprite = new Image();
     this.sprite.src = _spriteSrc;
     let imageData;
     imageLoaderCtx.imageSmoothingEnabled = false;
-    console.log(imageLoader.width, imageLoader.height);
     this.sprite.onload = () => {
       imageLoader.imageSmoothingEnabled = false;
       imageLoaderCtx.drawImage(this.sprite, 0, 0, this.width, this.height);
@@ -35,57 +47,48 @@ class ParallaxBackground extends GameEntity {
       this.buffer.data = imageData.data;
     };
     this.speed = 0;
-    this.fullWidth = this.width * this.repeatsX;
-    this.fullHeight = this.height * this.repeatsY;
-    this.flooredSpeed = Math.floor(this.speed);
-    this.axis = "x";
-    this.moveBy = this.flooredSpeed * this.direction;
-    this.highest = this.y + this.fullHeight;
-    this.furthest = this.x + this.fullWidth;
-    this.ySpeed = this.directionY * this.speed;
-    this.xSpeed = this.directionX * this.speed;
   }
-  repeatX(buffer) {
-    let x = Math.floor(this.x)
-    let y = Math.floor(this.y)
-    let xTakeSpeed = x - this.moveBy;
-      for (let i = 1; i < this.repeatsX + 1; i++) {
-        buffer.merge(
-          this.buffer,
-          xTakeSpeed + (this.width * i) ,
-          y
-        );
+  repeat(buffer) {
+    let xShift = this.x >> 31;
+    let yShift = this.y >> 31;
+    let xAbs = (this.x ^ (xShift)) - (xShift);
+    let yAbs = (this.y ^ (yShift)) - (yShift);
+    let x = xAbs * (this.x && this.x / xAbs);
+    let y = yAbs * (this.y && this.y / yAbs);
+    let loopLim = this.repeatsX;
+    for (let j = -loopLim; j <= loopLim; j++) {
+      for (let i = -loopLim; i <= loopLim; i++) {
+        if((i>-this.height)&&(j>-this.width)&&(j<this.width)&&(i<this.height)){
+          buffer.merge(
+            this.buffer,
+            x + this.width * j,
+            y + this.height * i
+          );
+        }
       }
-  }
-  repeatY(buffer){
-    let x = Math.floor(this.x)
-    let y = Math.floor(this.y)
-    let yTakeSpeed = y - this.moveBy;
-    for (let i = 1; i < this.repeatsY + 1; i++) {
-      buffer.merge(
-        this.buffer,
-        x,
-        yTakeSpeed + (this.height * i)
-      );
     }
   }
+  repeatY(buffer) {}
   scrollX() {
     this.x += this.directionX * this.speed;
-    if (this.x + this.fullWidth > resolution.x && this.directionX == 1) {
+    if (this.x >= resolution.x) {
       this.x -= this.width;
     }
-    if (this.x < 0 - this.width) {
+    if (this.x <= -this.width) {
       this.x = 0;
     }
   }
   scrollY() {
     this.y += this.directionY * this.speed;
-    if (this.highest > resolution.y && this.directionY !== 1) {
+    if (this.y >= resolution.y) {
       this.y -= this.height;
     }
-    if (this.y < -this.height) {
+    if (this.y <= -this.height) {
       this.y = 0;
     }
+  }
+  updateEntity(buffer) {
+    this.repeat(buffer);
   }
 }
 export { ParallaxBackground };

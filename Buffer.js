@@ -18,11 +18,11 @@ class Buffer {
     this.imageLoader.width = this.width;
     this.bufferLength = this.width * this.height * 4;
   }
-  reset() {
-    this.data.fill(0);
-    for (let i = 3; i < this.data.length; i += 4) {
-      this.data[i] = 255;
-    }
+   reset() {
+     this.data.fill(0);
+     for (let i = 3; i < this.data.length; i += 4) {
+       this.data[i] = 255;
+     }
   }
   merge = (buffer, x, y) => {
     if (
