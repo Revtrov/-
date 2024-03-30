@@ -1,0 +1,36 @@
+<!-- pixelate filter -->
+<svg width="0" height="0">
+  <defs>
+    <filter id="pixelate" x="0" y="0">
+      <feFlood x="1" y="1" height="1.25" width="1.25" />
+      <feComposite width="3" height="3" />
+      <feTile result="a" />
+      <feComposite in="SourceGraphic" in2="a" operator="in" />
+      <feMorphology operator="dilate" radius=".5" />
+    </filter>
+  </defs>
+</svg>
+<div class="title">Game Name</div>
+<div class="optionList">
+  <button
+    onmouseover="playSound('optionHover')"
+    onclick="playSound('optionClick', .25); closeMenu('mainMenu')"
+    class="option"
+  >
+    Continue
+  </button>
+  <button
+    onmouseover="playSound('optionHover')"
+    onclick="playSound('optionRegularPress',);closeMenu('mainMenu')"
+    class="option"
+  >
+    New
+  </button>
+  <button
+    onmouseover="playSound('optionHover')"
+    onclick="playSound('optionRegularPress');openMenu('settingsMenu');"
+    class="option"
+  >
+    Settings
+  </button>
+</div>

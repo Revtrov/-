@@ -1,0 +1,13 @@
+<svg width="0" height="0">
+  <defs>
+    <filter id="pixelate" x="0" y="0">
+      <feFlood x="1" y="1" height="1.25" width="1.25" />
+      <feComposite width="3" height="3" />
+      <feTile result="a" />
+      <feComposite in="SourceGraphic" in2="a" operator="in" />
+      <feMorphology operator="dilate" radius=".5" />
+    </filter>
+  </defs>
+</svg>
+<div class="title">Settings</div>
+<button class="closeButton" onmouseover="playSound('optionHover')"onclick="playSound('closeMenu', .25);closeMenu('settingsMenu');unHideMenu('mainMenu')">X</button>

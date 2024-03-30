@@ -4,7 +4,7 @@ import { Scene } from "./Scene.js";
 import { ParallaxBackground } from "./Background.js";
 
 window.onload= () => {};
-let resolution = { x: 682, y: 312 };
+let resolution = { x: 256, y: 128};
 let canvas = document.getElementById("canvas");
 canvas.width =resolution.x;
 canvas.height = resolution.y;
@@ -20,9 +20,9 @@ if (window.innerWidth > window.innerHeight) {
 }
 
 
-const face = new GameEntity("./face.png",0,0,64,64)
+const face = new GameEntity("./among.png",0,0,32,32)
 //const face = new GameEntity("./Son_Goku.webp", 0, 108 - 32, 120,204, 1);
-const Background = new ParallaxBackground("./grizzy.png",0,0,96,76,0,0)
+const Background = new ParallaxBackground("./background.png",0,0,256,128,0,0)
 //const BackgroundB = new ParallaxBackground("./background.png",0,0,191,64,0,2)
 
 
@@ -69,8 +69,11 @@ document.addEventListener("keydown",(e)=>{
     //console.log( face.border)
   }
 })
+
+openMenu("mainMenu")
+
 setInterval(()=>{
-  face.setRotation(i)
+  //face.setRotation(i)
   if (pressedKeys[87]) {
     dirs[1] = 1
     i++
@@ -88,7 +91,7 @@ setInterval(()=>{
   if (pressedKeys[65]) {
     i++
     dirs[0] = 1
-    face.unMirror()
+    face.mirror()
     face.x -= momentum/(dirs[0]+dirs[1]);
     //BackgroundB.direction = 1
     //BackgroundB.scroll()
@@ -98,7 +101,7 @@ setInterval(()=>{
   if (pressedKeys[68]) {
     i++
     dirs[0] = 1
-    face.mirror()
+    face.unMirror()
     face.x += momentum/(dirs[0]+dirs[1]);
     //BackgroundB.direction = -1
     //BackgroundB.scroll()
@@ -106,7 +109,7 @@ setInterval(()=>{
     Background.scrollX()
   }
   dirs=[0,0]
-},1000/240)
+},1000/60)
 function animate(){
   worker.postMessage({ msg: "render", image:image});
   requestAnimationFrame(animate)

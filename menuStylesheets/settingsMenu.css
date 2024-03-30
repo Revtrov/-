@@ -1,0 +1,71 @@
+@keyframes grow {
+  0% {
+    width: 0;
+    height: 0;
+    margin-top: 50vh;
+    margin-left: 50%;
+    opacity: 0;
+  }
+  100% {
+    width: 80%;
+    height: 80%;
+    margin-top: 10vh;
+    margin-left: 10%;
+    opacity: 100;
+  }
+}
+#settingsMenuhtml {
+  background: rgba(0, 0, 0, 1);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 80%;
+  height: 80%;
+  margin-top: 10vh;
+  margin-left: 10%;
+  border: 0.5vmin white solid;
+  box-shadow:0 0 30vmax 10vmax rgba(0, 0, 0, 1);
+  animation-name: grow;
+  animation-duration: .4s;
+  border-radius: 5vmin;
+  filter: url('#pixelate');
+}
+
+.title {
+  width: 100%;
+  height: 20vh;
+  line-height: 20vh;
+  color: white;
+  font-size: 8vmin;
+  text-align: center;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  user-select: none;
+  filter: url('#pixelate');
+}
+.closeButton {
+  position: absolute;
+  top: calc(10vh - 5vmin);
+  right: 5vmin;
+  width: 10vmin;
+  height: 10vmin;
+  border: 0.5vmin white solid;
+  background: black;
+  outline: none;
+  border-radius: 50%;
+  color: white;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  font-size: 5vmin;
+  filter: url('#pixelate');
+}
+.closeButton:hover {
+  background: rgba(255, 0, 0, 0.1);
+  border: 0.5vmin rgb(231, 109, 109) solid;
+  transform: scale(1.05);
+}
+.closeButton:active {
+  transform: scale(0.9);
+}

@@ -34,7 +34,6 @@ class ParallaxBackground {
       }
       this.repeatsX = this.repeatsY;
     }
-    console.log(this.repeatsX, this.repeatsY);
     this.buffer = new Buffer(this.width, this.height);
     this.sprite = new Image();
     this.sprite.src = _spriteSrc;
