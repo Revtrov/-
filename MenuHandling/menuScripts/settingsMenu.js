@@ -1,4 +1,4 @@
-import { buffer, updateImagedata } from '../script.js'
+import { buffer, updateImagedata } from '../../script.js'
 let settingsInit = () => {
   const stop = function (e) {
     e.preventDefault()

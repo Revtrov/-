@@ -31,7 +31,7 @@ let openMenu = (menuName) => {
       let css = document.createElement('link')
       css.setAttribute('id', `${menuName}css`)
       css.setAttribute('rel', 'stylesheet')
-      css.setAttribute('href', `./menuStylesheets/${menuName}.css`)
+      css.setAttribute('href', `./MenuHandling/menuStylesheets/${menuName}.css`)
       document.getElementById('menuCss')
       document.getElementById('menuCss').appendChild(css)
     }
@@ -41,12 +41,12 @@ let openMenu = (menuName) => {
     let menuScript = document.createElement('script')
     menuScript.setAttribute(
       'src',
-      `./menuScripts/${menuName}.js?` + Math.random(),
+      `./MenuHandling/menuScripts/${menuName}.js?` + Math.random(),
     )
     menuScript.setAttribute('id', menuName + 'js')
     menuScript.setAttribute('type', 'module')
     document.body.insertBefore(menuScript, document.getElementById('mainJs'))
-    fetch(`./menus/${menuName}.html`)
+    fetch(`./MenuHandling/menus/${menuName}.html`)
       .then((res) => res.text())
       .then((text) => {
         if (!document.getElementById(menuName + 'html')) {

@@ -1,6 +1,5 @@
-import { Buffer } from "./Buffer.js";
-import { GameEntity } from "./GameEntity.js";
-import { resolution, buffer } from "./script.js";
+import { Buffer } from "../Rendering/Buffer.js";
+import { resolution } from "../script.js";
 class ParallaxBackground {
   constructor(
     _spriteSrc,
@@ -21,19 +20,19 @@ class ParallaxBackground {
     imageLoader.width = this.width;
     this.direction = 1;
     this.wrap = true;
-    this.repeatsX = ((resolution.x / this.width) >>> 0) ;
-    this.repeatsY = ((resolution.y / this.height) >>> 0) ;
-    if (this.repeatsX > this.repeatsY) {
-      if (!(this.repeatsX & (2 - 1))) {
-        this.repeatsX+=1;
-      }
-      this.repeatsY = this.repeatsX;
-    } else {
-      if (!(this.repeatsY & (2 - 1))) {
-        this.repeatsY+=1;
-      }
-      this.repeatsX = this.repeatsY;
-    }
+    this.repeatsX = ((resolution.x / this.width) >>> 0) +2;
+    this.repeatsY = ((resolution.y / this.height) >>> 0) +2;
+    // if (this.repeatsX > this.repeatsY) {
+    //   if (!(this.repeatsX & 1)) {
+    //     this.repeatsX+=1;
+    //   }
+    //   this.repeatsY = this.repeatsX;
+    // } else {
+    //   if (!(this.repeatsY & 1)) {
+    //     this.repeatsY+=1;
+    //   }
+    //   this.repeatsX = this.repeatsY;
+    // }
     this.buffer = new Buffer(this.width, this.height);
     this.sprite = new Image();
     this.sprite.src = _spriteSrc;
@@ -47,18 +46,21 @@ class ParallaxBackground {
     };
     this.speed = 0;
   }
+  resetRes(resolution){
+    this.repeatsX = ((resolution.x / this.width) >>> 0) +2;
+    this.repeatsY = ((resolution.y / this.height) >>> 0) +2;
+  }
   repeat(buffer) {
+    // let xAbs = ((this.x ^ (xShift)) - (xShift));
+    // let yAbs = ((this.y ^ (yShift)) - (yShift));
     let xShift = this.x >> 31;
     let yShift = this.y >> 31;
     let xSign = this.x >> 63;
     let ySign = this.y >> 63;
-    // let xAbs = ((this.x ^ (xShift)) - (xShift));
-    // let yAbs = ((this.y ^ (yShift)) - (yShift));
     let x = ((this.x ^ (xShift)) - (xShift)) *  -((-1^xSign + 1^xSign) + 1);
     let y = ((this.y ^ (yShift)) - (yShift)) * -((-1^ySign + 1^ySign) + 1) ;
-    let loopLim = this.repeatsX;
-    for (let j = -loopLim; j <= loopLim; j++) {
-      for (let i = -loopLim; i <= loopLim; i++) {
+    for (let j = -this.repeatsX + 1; j < this.repeatsX; j++) {
+      for (let i = 0; i < this.repeatsY; i++) {
         if((i>-this.height)&&(j>-this.width)&&(j<this.width*2)&&(i<this.height)){
           buffer.merge(
             this.buffer,
@@ -71,7 +73,7 @@ class ParallaxBackground {
   }
   repeatY(buffer) {}
   scrollX() {
-    this.x += this.directionX * this.speed;
+    this.x += (this.directionX * this.speed);
     if (this.x >= resolution.x) {
       this.x -= this.width;
     }

@@ -1,7 +1,16 @@
-import { Buffer } from './Buffer.js'
-import { GameEntity } from './GameEntity.js'
-import { Scene } from './Scene.js'
-import { ParallaxBackground } from './Background.js'
+import { Buffer } from './Rendering/Buffer.js'
+import { GameEntity } from './Entities/GameEntity.js'
+import { Scene } from './Scene/Scene.js'
+import { ParallaxBackground } from './Scene/Background.js'
+function initGPU() {
+	try {
+		return new window.GPU.GPU();
+	} catch (e) {
+		return new GPU();
+	}
+}
+const gpu = initGPU();
+console.log(gpu)
 
 window.onload = () => {}
 let resolution = { x: 1024, y: 128 }
@@ -9,7 +18,7 @@ let canvas = document.getElementById('canvas')
 canvas.width = resolution.x
 canvas.height = resolution.y
 const offscreen = canvas.transferControlToOffscreen()
-const worker = new Worker('Renderer.js')
+const worker = new Worker('./Rendering/Renderer.js')
 
 worker.postMessage({ msg: 'offscreen', canvas: offscreen }, [offscreen])
 if (window.innerWidth > window.innerHeight) {
@@ -19,14 +28,22 @@ if (window.innerWidth > window.innerHeight) {
 }
 
 //const BackgroundB = new ParallaxBackground("./background.png",0,0,191,64,0,2)
-const player = new GameEntity('./among.png', 0, resolution.y - 32, 32, 32, 2)
-const moon = new GameEntity('./Moon.png', 32,32, 32, 32, 1)
-console.log(moon)
+const player = new GameEntity(
+  './among.png',
+  0,
+  resolution.y - 32,
+  32,
+  32,
+  2,
+  0,
+  1,
+)
+const moon = new GameEntity('./Moon.png', 32, 32, 32, 32, 1, 0, false)
 //const player = new GameEntity("./Son_Goku.webp", 0, 108 - 32, 120,204, 1);
-const Background = new ParallaxBackground('./castle.jpg', 0, 0, 128, 128, 0, 0)
+const Background = new ParallaxBackground('./castle.jpg', 0, 0,256, 128, 0, 0)
 
 let buffer = new Buffer(resolution.x, resolution.y)
-let scene = new Scene([player, moon,Background], 1000 / 240, null, buffer)
+let scene = new Scene([player, moon, Background], 1, null, buffer)
 let image = new ImageData(buffer.data, resolution.x)
 let pressedKeys = {}
 window.onkeyup = (e) => {
@@ -37,7 +54,7 @@ window.onkeydown = (e) => {
 }
 
 //BackgroundB.speed = .1
-Background.speed = 3
+Background.speed = 1
 canvas.addEventListener('mousemove', (e) => {})
 
 // let f = 0;
@@ -75,12 +92,13 @@ document.addEventListener('keydown', (e) => {
 openMenu('mainMenu')
 
 let updateImagedata = (data, res) => {
-  console.log(res, (res / 8) >>> 0)
   image = new ImageData(data, res)
   image.data.set(data)
   scene.buffer = buffer
   resolution = { x: res, y: (res / 8) >>> 0 }
+  Background.resetRes(resolution)
   worker.postMessage({ msg: 'resize', res: resolution })
+  worker.postMessage({ msg: 'offscreen', canvas: offscreen }, [offscreen])
 }
 let jumpCooldown = 1000
 let dashCooldown = 1000
@@ -141,8 +159,8 @@ setInterval(() => {
     Background.scrollX()
   }
   if (pressedKeys[16] && dashCooldown > 1000) {
-    player.x += player.width*1.5*-Background.directionX;
-    dashCooldown =0
+    player.x += player.width * 1.5 * -Background.directionX
+    dashCooldown = 0
   }
   dirs = [0, 0]
 }, 1000 / 60)
@@ -151,4 +169,4 @@ function animate() {
   requestAnimationFrame(animate)
 }
 animate()
-export { image, resolution, buffer, updateImagedata }
+export { image, resolution, buffer, updateImagedata, gpu }
