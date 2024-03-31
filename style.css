@@ -16,7 +16,7 @@ body {
 #canvas {
   border: 1pc solid white;
   cursor: none;
-  width: 100%;
+  width: calc(100% - 2pc);
   height: auto;
   position:fixed;
   left:0;

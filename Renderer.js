@@ -1,12 +1,16 @@
-let canvas, ctx;
+let canvas, ctx
 onmessage = (ev) => {
-  if (ev.data.msg === "offscreen") {
-    canvas = ev.data.canvas;
-    ctx = canvas.getContext("2d",{alpha:false});
+  if (ev.data.msg === 'offscreen') {
+    canvas = ev.data.canvas
+    ctx = canvas.getContext('2d', { alpha: false })
   }
-  if (ev.data.msg === "render") {
+  if (ev.data.msg === 'render') {
     //createImageBitmap(ev.data.image)
-      ctx.putImageData(ev.data.image,0,0);
-      ev.data = null
+    ctx.putImageData(ev.data.image, 0, 0)
+    ev.data = null
   }
-};
+  if (ev.data.msg === 'resize') {
+    canvas.width = ev.data.res.x
+    canvas.height = ev.data.res.y
+  }
+}

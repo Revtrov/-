@@ -6,7 +6,7 @@ class GameEntity {
     _y,
     _width,
     _height,
-    _zHeight,
+    _zHeight = 0,
     _rotation,
     _controllable
   ) {
@@ -20,12 +20,10 @@ class GameEntity {
     this.rotation = _rotation || 0;
     this.width = _width;
     this.height = _height;
-    this.dimensionOffset =
-      ((Math.hypot(this.height, this.width) / 4) >>> 0) * 4;
+    this.dimensionOffset =0//((Math.hypot(this.height, this.width) / 4) >>> 0) * 4;
     this.halfDimensionOffset = this.dimensionOffset / 2;
     this.imageLoader.width =this.imageLoader.height =
       Math.max(...[this.height, this.width]) + this.dimensionOffset;
-      console.log(this.imageLoader.width,this.imageLoader.height)
     this.imageLoaderHalf = this.imageLoader.width / 2;
     this.zHeight = _zHeight;
     this.xInset = (this.imageLoader.width - this.width)/2;

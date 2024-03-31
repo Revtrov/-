@@ -9,7 +9,7 @@ class ParallaxBackground {
     _width,
     _height,
     _animationPosition,
-    _zHeight
+    _zHeight = 0
   ) {
     this.height = _height;
     this.width = _width;
@@ -50,20 +50,22 @@ class ParallaxBackground {
   repeat(buffer) {
     let xShift = this.x >> 31;
     let yShift = this.y >> 31;
-    let xAbs = (this.x ^ (xShift)) - (xShift);
-    let yAbs = (this.y ^ (yShift)) - (yShift);
-    let x = xAbs * (this.x && this.x / xAbs);
-    let y = yAbs * (this.y && this.y / yAbs);
+    let xSign = this.x >> 63;
+    let ySign = this.y >> 63;
+    // let xAbs = ((this.x ^ (xShift)) - (xShift));
+    // let yAbs = ((this.y ^ (yShift)) - (yShift));
+    let x = ((this.x ^ (xShift)) - (xShift)) *  -((-1^xSign + 1^xSign) + 1);
+    let y = ((this.y ^ (yShift)) - (yShift)) * -((-1^ySign + 1^ySign) + 1) ;
     let loopLim = this.repeatsX;
     for (let j = -loopLim; j <= loopLim; j++) {
       for (let i = -loopLim; i <= loopLim; i++) {
-        if((i>-this.height)&&(j>-this.width)&&(j<this.width)&&(i<this.height)){
+        if((i>-this.height)&&(j>-this.width)&&(j<this.width*2)&&(i<this.height)){
           buffer.merge(
             this.buffer,
             x + this.width * j,
             y + this.height * i
           );
-        }
+        }else{continue}
       }
     }
   }

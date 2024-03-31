@@ -17,12 +17,25 @@ class Buffer {
     this.imageLoader.height = this.height;
     this.imageLoader.width = this.width;
     this.bufferLength = this.width * this.height * 4;
+    this.oneOverRowLen = 1/this.rowLen
   }
-   reset() {
+  reset() {
      this.data.fill(0);
      for (let i = 3; i < this.data.length; i += 4) {
        this.data[i] = 255;
      }
+  }
+  reInit(width, height){
+    this.data = new Uint8ClampedArray(
+      Array(width * height * 4).fill(0)
+    );
+    this.width = width;
+    this.height = height;
+    this.rowLen = this.width * 4;
+    this.imageLoader.height = this.height;
+    this.imageLoader.width = this.width;
+    this.bufferLength = this.width * this.height * 4;
+    this.oneOverRowLen = 1/this.rowLen
   }
   merge = (buffer, x, y) => {
     if (
@@ -40,11 +53,10 @@ class Buffer {
     let i = buffer.bufferLength - 1;
     while (i > 3) {
       if (bufferData[i]) {
-        const devided = (i / buffer.rowLen) >>> 0;
+        const devided = (i * buffer.oneOverRowLen) >>> 0;
         const innerTimeLen = (devided * this.rowLen);
         const pxIndex = origin + innerTimeLen + (i - buffer.rowLen * devided);
         const prev = pixelsTimeHeight + innerTimeLen;
-
         if (pxIndex > prev && pxIndex < prev + this.rowLen) {
           this.data[pxIndex] = bufferData[i];
           this.data[pxIndex - 3] = bufferData[i - 3];

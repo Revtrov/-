@@ -10,4 +10,41 @@
   </defs>
 </svg>
 <div class="title">Settings</div>
-<button class="closeButton" onmouseover="playSound('optionHover')"onclick="playSound('closeMenu', .25);closeMenu('settingsMenu');unHideMenu('mainMenu')">X</button>
+<button
+  class="closeButton"
+  onmouseover="playSound('optionHover')"
+  onclick="playSound('closeMenu', .25);closeMenu('settingsMenu');unHideMenu('mainMenu')"
+>
+  X
+</button>
+<div class="optionList">
+  <div class="sliderContainer">
+    <input
+      onmouseover="playSound('optionHover')"
+      onclick="playSound('sliderChange', .25)"
+      class="option slider"
+      type="range"
+      min="100"
+      max="1024"
+      value="0"
+      step="4"
+      id="resSlider"
+    />
+    <div class="range-text">0</div>
+  </div>
+
+  <button
+    onmouseover="playSound('optionHover')"
+    onclick="playSound('optionRegularPress',);closeMenu('mainMenu')"
+    class="option"
+  >
+    New
+  </button>
+  <button
+    onmouseover="playSound('optionHover')"
+    onclick="playSound('optionRegularPress');openMenu('settingsMenu');"
+    class="option"
+  >
+    Settings
+  </button>
+</div>
