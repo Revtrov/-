@@ -2,15 +2,7 @@ import { Buffer } from './Rendering/Buffer.js'
 import { GameEntity } from './Entities/GameEntity.js'
 import { Scene } from './Scene/Scene.js'
 import { ParallaxBackground } from './Scene/Background.js'
-function initGPU() {
-	try {
-		return new window.GPU.GPU();
-	} catch (e) {
-		return new GPU();
-	}
-}
-const gpu = initGPU();
-console.log(gpu)
+
 
 window.onload = () => {}
 let resolution = { x: 1024, y: 128 }
