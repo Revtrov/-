@@ -1,4 +1,4 @@
-import { gpu } from '../script.js'
+
 class Buffer {
   constructor(_width, _height) {
     this.width = _width
