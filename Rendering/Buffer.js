@@ -37,7 +37,6 @@ class Buffer {
     this.oneOverRowLen = 1 / this.rowLen
   }
   merge = (buffer, x, y) => {
-    //let output = kernel(buffer, x, y, rowLen, height, thisBuffer)
     if (
       x >= this.rowLen ||
       y >= this.height ||
@@ -51,7 +50,6 @@ class Buffer {
     const pixelsTimeHeight = y * this.rowLen
     const origin = pixelsTimeHeight + rowIndex
     let i = buffer.bufferLength - 1
-    console.time('iterationTime')
     while (i > 3) {
       if (bufferData[i]) {
         const devided = (i * buffer.oneOverRowLen) >>> 0
@@ -67,7 +65,7 @@ class Buffer {
       }
       i -= 4
     }
-    console.timeEnd('iterationTime')
+    
   }
   get() {
     return temp
