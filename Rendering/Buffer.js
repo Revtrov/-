@@ -45,6 +45,7 @@ class Buffer {
     ) {
       return
     }
+    console.log(buffer)
     const bufferData = buffer.data
     const rowIndex = x * 4
     const pixelsTimeHeight = y * this.rowLen
