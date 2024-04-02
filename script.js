@@ -161,4 +161,4 @@ function animate() {
   requestAnimationFrame(animate)
 }
 animate()
-export { image, resolution, buffer, updateImagedata, gpu }
+export { image, resolution, buffer, updateImagedata}
