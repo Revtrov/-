@@ -22,6 +22,10 @@ class ParallaxBackground {
     this.wrap = true;
     this.repeatsX = ((resolution.x / this.width) >>> 0) +2;
     this.repeatsY = ((resolution.y / this.height) >>> 0) +2;
+    this.xShift = this.x >> 31;
+    this.yShift = this.y >> 31;
+    this.xSign = this.x >> 63;
+    this.ySign = this.y >> 63;
     // if (this.repeatsX > this.repeatsY) {
     //   if (!(this.repeatsX & 1)) {
     //     this.repeatsX+=1;
@@ -45,20 +49,18 @@ class ParallaxBackground {
       this.buffer.data = imageData.data;
     };
     this.speed = 0;
+    console.log(this.buffer)
+
   }
   resetRes(resolution){
     this.repeatsX = ((resolution.x / this.width) >>> 0) +2;
     this.repeatsY = ((resolution.y / this.height) >>> 0) +2;
   }
   repeat(buffer) {
-    // let xAbs = ((this.x ^ (xShift)) - (xShift));
-    // let yAbs = ((this.y ^ (yShift)) - (yShift));
-    let xShift = this.x >> 31;
-    let yShift = this.y >> 31;
-    let xSign = this.x >> 63;
-    let ySign = this.y >> 63;
-    let x = ((this.x ^ (xShift)) - (xShift)) *  -((-1^xSign + 1^xSign) + 1);
-    let y = ((this.y ^ (yShift)) - (yShift)) * -((-1^ySign + 1^ySign) + 1) ;
+    // let xAbs = ((this.x ^ (this.xShift)) - (this.xShift));
+    // let yAbs = ((this.y ^ (this.yShift)) - (this.yShift));
+    let x = ((this.x ^ (this.xShift)) - (this.xShift)) ;
+    let y = ((this.y ^ (this.yShift)) - (this.yShift)) ;
     for (let j = -this.repeatsX + 1; j < this.repeatsX; j++) {
       for (let i = 0; i < this.repeatsY; i++) {
         if((i>-this.height)&&(j>-this.width)&&(j<this.width*2)&&(i<this.height)){

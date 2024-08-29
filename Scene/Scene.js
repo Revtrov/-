@@ -4,9 +4,10 @@ class Scene {
     this.gameEntities = _gameEntities
     this.buffer = _buffer
     this.gameEntities.sort((a, b) => (a.zHeight > b.zHeight ? 1 : -1))
+    console.log(this.gameEntities)
     this.entityCount = this.gameEntities.length
     let update = () => {
-      this.buffer.reset()
+      //this.buffer.reset()
       for (let i = 0; i < this.entityCount; i++) {
         this.gameEntities[i].updateEntity(this.buffer)
         // if(this.gameEntities[i].wrap){

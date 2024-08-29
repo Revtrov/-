@@ -22,6 +22,8 @@ class GameEntity {
     this.rotation = _rotation || 0
     this.width = _width
     this.height = _height
+    this.hWidth = _width / 2
+    this.hHeight = _height / 2
     this.dimensionOffset = 0 //((Math.hypot(this.height, this.width) / 4) >>> 0) * 4;
     this.halfDimensionOffset = this.dimensionOffset / 2
     this.imageLoader.width = this.imageLoader.height =
@@ -40,6 +42,13 @@ class GameEntity {
     this.mirrored = false
     this.#rotateable = _rotateable
     this.lightEntity = _lightEntity
+    console.log(this.lightEntity)
+    if (this.lightEntity) {
+      this.lightW = this.lightEntity.r - this.hWidth
+    }
+    if (this.lightEntity) {
+      this.lightH = this.lightEntity.r - this.hHeight
+    }
     if (this.#rotateable !== 0) {
       this.sprite.onload = () => {
         for (let i = 0; i <= 360; i += 16) {
@@ -163,10 +172,14 @@ class GameEntity {
     }
   }
   updateEntity(buffer) {
+    if (this.lightEntity) {
+      buffer.merge(
+        this.lightEntity.buffer,
+        ~~this.x - this.lightW,
+        ~~this.y - this.lightH,
+      )
+    }
     buffer.merge(this.buffer, ~~this.x, ~~this.y)
-    // if (this.lightEntity) {
-    //   buffer.merge(this.lightEntity.buffer, ~~this.x, ~~this.y)
-    // }
   }
   toggle() {
     this.mirrored = !this.mirrored
